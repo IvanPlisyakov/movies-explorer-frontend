@@ -1,0 +1,131 @@
+.promo {
+  background-color: #DDDEE3;
+}
+
+@media screen and (max-width: 740px){
+  .promo {
+    min-height: 630px;
+  }
+}
+
+@media screen and (min-width: 740px) and (max-width: 1262px){
+  .promo {
+    min-height: 844px;
+  } 
+}
+
+@media screen and (min-width: 1262px) {
+  .promo {
+    min-height: 560px;
+  } 
+}
+
+.promo__column {
+  margin: auto;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 740px){
+  .promo__column {
+    padding-top: 183px;
+  }
+}
+
+@media screen and (min-width: 740px) and (max-width: 1262px) {
+  .promo__column {
+    width: 708px;
+    padding-top: 300px;
+  } 
+}
+
+@media screen and (min-width: 1262px) {
+  .promo__column {
+    width: 1140px;
+    padding-top: 50px;
+  } 
+}
+
+.promo__title {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  font-style: normal;
+  font-weight: normal;  
+}
+
+@media screen and (max-width: 740px) {
+  .promo__title {
+    margin: auto;
+    text-align: center;
+    max-width: 310px;
+    font-size: 31px;
+    line-height: 39px;
+  }
+}
+
+@media screen and (min-width: 740px) and (max-width: 1262px) {
+  .promo__title {
+    text-align: center;
+    max-width: 680px;
+    font-size: 40px;
+    line-height: 52px;
+  } 
+}
+
+@media screen and (min-width: 1262px) {
+  .promo__title {
+    max-width: 626px;
+    font-size: 40px;
+    line-height: 52px;
+  } 
+}
+
+@media screen and (max-width: 740px) {
+  .promo__image-overlay {
+    margin-top: 60px;
+    width: 100vw;
+    height: 230px;
+    position: relative;
+    overflow: hidden;
+  }
+}
+
+@media screen and (min-width: 740px) and (max-width: 1262px) {
+  .promo__image-overlay {
+    margin: 140px auto 0 auto;
+    width: 680px;
+    height: 230px;
+  } 
+}
+
+@media screen and (min-width: 1262px) {
+  .promo__image-overlay {
+    margin-top: 102px;
+    margin-left: 418px;
+    width: 722px;
+    height: 244px;
+  } 
+}
+
+.promo__image {
+  height: 100%;
+}
+
+@media screen and (max-width: 740px) {
+  .promo__image {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+}
+
+/*@media screen and (min-width: 740px) and (max-width: 1262px) {
+  .promo__image {
+
+  } 
+}
+
+@media screen and (min-width: 1262px) {
+  .promo__image {
+
+  } 
+}*/

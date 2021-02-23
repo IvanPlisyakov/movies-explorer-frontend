@@ -1,0 +1,49 @@
+.login {
+  background-color: #FAFAFA;
+}
+
+.login__column {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin: auto;
+}
+
+@media screen and (max-width: 740px) {
+  .login__column {
+    width: 260px;
+    padding-bottom: 30px;
+  }
+}
+
+@media screen and (min-width: 740px) and (max-width: 1262px) {
+  .login__column {
+    width: 396px;
+    padding-bottom: 232px;
+  } 
+}
+
+@media screen and (min-width: 1262px) {
+  .login__column {
+    width: 396px;
+    padding-bottom: 70px;
+  } 
+}
+
+@media screen and (max-width: 740px) {
+  .login__air-block {
+    height: 267px;
+  }
+}
+
+@media screen and (min-width: 740px) and (max-width: 1262px) {
+  .login__air-block {
+    height: 179px;
+  } 
+}
+
+@media screen and (min-width: 1262px) {
+  .login__air-block {
+    height: 179px;
+  } 
+}
