@@ -8,7 +8,7 @@ function MoviesCard(props) {
   const duration = `${Math.floor(props.card.duration / 60) === 0 ? '' : `${String(Math.floor(props.card.duration / 60))}ч`} ${props.card.duration % 60}м`;
   return (
     <div className="movies-card">
-      <img className="movies-card__image" src={props.card.image} alt="" />
+      <img className="movies-card__image" src={props.card.image} alt="Постер фильма" />
       <p className="movies-card__name">{props.card.nameRU}</p>
       <div className="movies-card__overlay-duration">
         <p className="movies-card__duration">{duration}</p>
@@ -18,11 +18,11 @@ function MoviesCard(props) {
           && (
             props.card.saved
               ? <p className="movies-card__save-text">Сохранить</p>
-              : <img className="movies-card__save-icon" src={saveIcon} alt="" />
+              : <img className="movies-card__save-icon" src={saveIcon} alt="Галочка" />
           )
         }
         { props.type === 'saved-movies'
-         && <img className="movies-card__save-icon" src={deleteIcon} alt="" />
+         && <img className="movies-card__save-icon" src={deleteIcon} alt="Крестик" />
         }
       </div>
     </div>

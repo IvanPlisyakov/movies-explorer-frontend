@@ -7,7 +7,7 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 import navTabLinkAccountIcon from '../../images/nav-tab__link-account-icon.svg';
 import asideBarReset from '../../images/nav-tab__aside-bar-reset.svg';
 
-function NavTab(props) {
+function NavTab() {
   const { path } = useRouteMatch();
 
   const currentUser = React.useContext(CurrentUserContext);
@@ -79,7 +79,7 @@ function NavTab(props) {
         <div className="nav-tab__aside-bar-shading" onClick={handleInActiveAside}></div>
         <div className="nav-tab__aside-bar-main">
           <div className="nav-tab__aside-bar__column">
-            <img className="nav-tab__aside-bar-reset" src={asideBarReset} alt="" onClick={handleInActiveAside} />
+            <img className="nav-tab__aside-bar-reset" src={asideBarReset} alt="Кнопка закрытия боковой панели" onClick={handleInActiveAside} />
             <div className="nav-tab__aside-bar-links">
               <NavLink className="nav-tab__aside-bar-link" activeClassName="nav-tab__aside-bar-link_active" exact to="/" >Главная</NavLink>
               <NavLink className="nav-tab__aside-bar-link" activeClassName="nav-tab__aside-bar-link_active" to="/movies" >Фильмы</NavLink>

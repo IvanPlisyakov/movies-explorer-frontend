@@ -51,11 +51,6 @@ const massSavedCards = [
   },
 ];
 
-const userData = {
-  name: 'Иван',
-  email: 'dotaboss2017@mail.ru',
-};
-
 function App() {
   const [currentUser, setCurrentUser] = React.useState({
     name: 'соска Вера',
@@ -77,7 +72,7 @@ function App() {
           <SavedMovies cards={massSavedCards} />
         </Route>
         <Route path="/profile">
-          <Profile user={userData}/>
+          <Profile />
         </Route>
         <Route path="/signup">
           <Register />

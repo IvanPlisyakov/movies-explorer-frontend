@@ -49,9 +49,9 @@ function SearchForm() {
     <section className="search-form">
       <div className="search-form__block">
         <div className="search-form__block-input">
-          <img className="search-form__icon" src={searchFormIcon} alt="" />
-          <input className="search-form__input" value={movie} onChange={handleChangeMovie} type="text" placeholder="Фильм" />
-          <img className={`search-form__reset ${reset === false ? 'search-form__reset_inactive' : ''}`} src={searchFormReset} alt="" onClick={clearInput} />
+          <img className="search-form__icon" src={searchFormIcon} alt="Инкона лупы" />
+          <input className="search-form__input" value={movie} onChange={handleChangeMovie} type="text" placeholder="Фильм" required/>
+          <img className={`search-form__reset ${reset === false ? 'search-form__reset_inactive' : ''}`} src={searchFormReset} alt="Копка, стирающая поля ввода" onClick={clearInput} />
           <div className="search-form__search"></div>
         </div>
         {screenWidth >= 723 && searchForm}
