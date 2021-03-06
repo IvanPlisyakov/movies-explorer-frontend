@@ -20,7 +20,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint ./",
-    "lint:fix": "eslint ./ --fix"
+    "lint:fix": "eslint ./ --fix",
+    "deploy": "npm run build && scp -r ./build/* ivan@84.252.129.232:/home/ivan/frontend"
   },
   "eslintConfig": {
     "extends": [

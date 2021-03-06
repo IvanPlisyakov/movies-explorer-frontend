@@ -218,6 +218,13 @@ function App() {
       });
   }
 
+  function changeUser(email, name) {
+    mainApi.changeProfile(email, name)
+      .then((data) => {
+        setCurrentUser(data);
+      });
+  }
+
   /* React.useEffect(() => {
     // getMovies();
     console.log(getSavedMovies());
@@ -255,6 +262,7 @@ function App() {
             stateLogin={true}
             path="/profile"
             setLoggedIn={setLoggedIn}
+            changeUser={changeUser}
             component={Profile}
           />
           <ProtectedRoute exact

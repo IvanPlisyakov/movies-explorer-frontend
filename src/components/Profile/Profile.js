@@ -31,6 +31,11 @@ function Profile(props) {
     history.push('/signin');
   }
 
+  function handleChangeButton() {
+    props.changeUser(email, name);
+    setFormActive(true);
+  }
+
   return (
     <>
       <Header />
@@ -48,12 +53,12 @@ function Profile(props) {
             <label className="profile__field">
               <div className={`profile__input-overlay ${formActive ? '' : 'profile__input-overlay_disabled'}`}>
                 <p className="profile__placeholder">Почта</p>
-                <input className={`profile__input profile__input_data_email ${formActive ? '' : 'profile__input_disabled'} profile__input_error`} id="email-input" value={email} onChange={handleChangeEmail} type="email" name="profile-сhange" disabled={formActive}/>
+                <input className={`profile__input profile__input_data_email ${formActive ? '' : 'profile__input_disabled'}`} id="email-input" value={email} onChange={handleChangeEmail} type="email" name="profile-сhange" disabled={formActive}/>
               </div>
-              <span className={`profile__input-error ${formActive ? 'profile__input-error_indisabled' : ''}`} id="email-input-error">error</span>
+              <span className={`profile__input-error ${formActive ? 'profile__input-error_indisabled' : ''}`} id="email-input-error"></span>
             </label>
           </form>
-          <p className="profile__change" onClick={handleProfileChange}>{formActive ? 'Редактировать' : 'Сохранить'}</p>
+          <p className="profile__change" onClick={formActive ? handleProfileChange : handleChangeButton}>{formActive ? 'Редактировать' : 'Сохранить'}</p>
           <p className="profile__exit" onClick={signOut}>Выйти из аккаунта</p>
         </div>
       </section>

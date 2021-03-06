@@ -60,6 +60,22 @@ class MainApi {
       .then((res) => res.json())
       .then((data) => data);
   }
+
+  changeProfile(email, name) {
+    return fetch(`${this._baseUrl}/users/me`, {
+      method: 'PATCH',
+      headers: {
+        ...this._headers,
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      },
+      body: JSON.stringify({
+        email: String(email),
+        name: String(name),
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => data);
+  }
 }
 
 export const mainApi = new MainApi({
