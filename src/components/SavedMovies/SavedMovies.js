@@ -8,16 +8,27 @@ import Preloader from '../Preloader/Preloader';
 import Footer from '../Footer/Footer';
 
 function SavedMovies(props) {
-  const [preloaderIsActive, setPreloaderIsActive] = React.useState(true);
+  const [filterSavedMovies, setFilterSavedMovies] = React.useState('');
+
+  function filterReadyMovies(string, shortMovieIs) {
+    const filtReadyMovies = props.savedMovies.filter((movie) => {
+      return (movie.nameRU.indexOf(string) > -1) && ((movie.duration > 40) !== shortMovieIs);
+    });
+    setFilterSavedMovies(filtReadyMovies);
+  }
+
+  React.useEffect(() => {
+    // props.getSavedMovies();
+    props.getSavedMovies();
+    // filterReadyMovies('', true);
+    // console.log(props.savedMovies);
+  }, []);
 
   return (
     <div className="movies">
       <Header />
-      <SearchForm />
-      {preloaderIsActive === true
-        ? <MoviesCardList cards={props.cards} type={'saved-movies'} />
-        : <Preloader />
-      }
+      <SearchForm filterReadyMovies={filterReadyMovies}/>
+      <MoviesCardList cards={filterSavedMovies === '' ? props.savedMovies : filterSavedMovies} type={'saved-movies'} deleteMovie={props.deleteMovie}/>
       <Footer />
     </div>
   );

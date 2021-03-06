@@ -1,11 +1,12 @@
 import React from 'react';
 import './Profile.css';
 
-import { Link } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 import Header from '../Header/Header';
 
-function Profile() {
+function Profile(props) {
+  const history = useHistory();
   const currentUser = React.useContext(CurrentUserContext);
 
   const [formActive, setFormActive] = React.useState(true);
@@ -22,6 +23,12 @@ function Profile() {
   const [email, setEmail] = React.useState(currentUser.email);
   function handleChangeEmail(e) {
     setEmail(e.target.value);
+  }
+
+  function signOut() {
+    props.setLoggedIn(false);
+    localStorage.removeItem('jwt');
+    history.push('/signin');
   }
 
   return (
@@ -47,7 +54,7 @@ function Profile() {
             </label>
           </form>
           <p className="profile__change" onClick={handleProfileChange}>{formActive ? 'Редактировать' : 'Сохранить'}</p>
-          <Link to="/signin" className="profile__exit">Выйти из аккаунта</Link>
+          <p className="profile__exit" onClick={signOut}>Выйти из аккаунта</p>
         </div>
       </section>
     </>

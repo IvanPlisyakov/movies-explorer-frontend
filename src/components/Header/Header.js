@@ -7,7 +7,6 @@ import NavTab from '../NavTab/NavTab';
 
 function Header() {
   const { path } = useRouteMatch();
-
   return (
   <>
     <header className={`header ${path === '/' ? 'header_background-color' : ''} `}>

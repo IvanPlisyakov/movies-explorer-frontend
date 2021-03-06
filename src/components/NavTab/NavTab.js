@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink, Link, useRouteMatch } from 'react-router-dom';
 import './NavTab.css';
 
-import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
+import { LoggedInContext } from '../../contexts/LoggedInContext.js';
 
 import navTabLinkAccountIcon from '../../images/nav-tab__link-account-icon.svg';
 import asideBarReset from '../../images/nav-tab__aside-bar-reset.svg';
@@ -10,7 +10,7 @@ import asideBarReset from '../../images/nav-tab__aside-bar-reset.svg';
 function NavTab() {
   const { path } = useRouteMatch();
 
-  const currentUser = React.useContext(CurrentUserContext);
+  const loggedIn = React.useContext(LoggedInContext);
 
   const [screenWidth, setScreenWidth] = React.useState(document.documentElement.clientWidth);
   function handleWindowResize() {
@@ -19,17 +19,15 @@ function NavTab() {
   window.addEventListener('resize', handleWindowResize);
 
   const [asideActive, setAsideActive] = React.useState(false);
-
   function handleActiveAside() {
     setAsideActive(true);
   }
-
   function handleInActiveAside() {
     setAsideActive(false);
   }
 
   function createNav() {
-    if (currentUser.loggedIn) {
+    if (loggedIn) {
       if (screenWidth >= 1245) {
         return (
         <>
@@ -45,29 +43,29 @@ function NavTab() {
         );
       }
       return (
+
           <div className="nav-tab__link-menu" onClick={handleActiveAside}></div>
       );
     }
     switch (path) {
       case '/signup':
         return (
-            <p className="nav-tab__greeting">Добро пожаловать!</p>
+          <p className="nav-tab__greeting">Добро пожаловать!</p>
         );
 
       case '/signin':
         return (
-            <p className="nav-tab__greeting">Рады видеть!</p>
+          <p className="nav-tab__greeting">Рады видеть!</p>
         );
       default:
         return (
-          <>
-            <Link to="/signup" className="nav-tab__link-register">Регистрация</Link>
-            <Link to="/signin" className="nav-tab__link-login">Войти</Link>
-          </>
+            <>
+              <Link to="/signup" className="nav-tab__link-register">Регистрация</Link>
+              <Link to="/signin" className="nav-tab__link-login">Войти</Link>
+            </>
         );
     }
   }
-
   const navigation = createNav();
 
   return (
