@@ -1,7 +1,41 @@
-class MainApi {
-  constructor(data) {
+export class MainApi {
+  constructor(data, errorCallback) {
     this._baseUrl = data.baseUrl;
     this._headers = data.headers;
+    this._errorCallback = errorCallback;
+  }
+
+  _standartErrorThen(res) {
+    switch (res.status) {
+      case 400:
+        this._errorCallback('Ошибка валидации');
+        return;
+      case 401:
+        this._errorCallback('Пользователь не авторизован');
+        return;
+      case 404:
+        this._errorCallback('Ресурс не найден');
+        return;
+      case 409:
+        this._errorCallback('Конфликт на сервере');
+        return;
+      default:
+        this._errorCallback('Ошибка на сервере');
+        return;
+    }
+  }
+
+  _standartThen(res) {
+    if (Number(res.status) >= 200 && Number(res.status) < 300) {
+      return res.json();
+    }
+
+    this._standartErrorThen(res);
+    return Promise.reject(`Ошибка: ${res.status}`);
+  }
+
+  _sendStandartCatch(err) {
+    console.log(err);
   }
 
   register(name, email, password) {
@@ -14,18 +48,8 @@ class MainApi {
         password: String(password),
       }),
     })
-      .then((response) => {
-        console.log(response);
-        try {
-          if (response.status === 201) {
-            return response.json();
-          }
-        } catch (e) {
-          return (e);
-        }
-      })
-      .then((res) => res)
-      .catch((err) => console.log(err));
+      .then((response) => this._standartThen(response))
+      .catch((err) => this._sendStandartCatch(err));
   }
 
   authorize(email, password) {
@@ -37,16 +61,16 @@ class MainApi {
         password: String(password),
       }),
     })
-      .then(((response) => response.json()))
+      .then((response) => this._standartThen(response))
       .then((data) => {
         if (data.token) {
           localStorage.setItem('jwt', data.token);
           return data;
         }
+
+        return Promise.reject(`Ошибка: ${res.status}`);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => this._sendStandartCatch(err));
   }
 
   getContent() {
@@ -57,8 +81,8 @@ class MainApi {
         Authorization: `Bearer ${localStorage.getItem('jwt')}`,
       },
     })
-      .then((res) => res.json())
-      .then((data) => data);
+      .then((response) => this._standartThen(response))
+      .catch((err) => this._sendStandartCatch(err));
   }
 
   changeProfile(email, name) {
@@ -73,15 +97,15 @@ class MainApi {
         name: String(name),
       }),
     })
-      .then((res) => res.json())
-      .then((data) => data);
+      .then((response) => this._standartThen(response))
+      .catch((err) => this._sendStandartCatch(err));
   }
 }
 
-export const mainApi = new MainApi({
-  baseUrl: 'https://api.deadinside.students.nomoredomains.monster', // 'https://api.deadinside.students.nomoredomains.monster', // 'http://localhost:3000',//'http://motherShaker.students.nomoredomains.monster',//'https://auth.nomoreparties.co',
+/* export const mainApi = new MainApi({
+  baseUrl: 'http://localhost:3001', // 'https://api.deadinside.students.nomoredomains.monster', // 'http://localhost:3000',//'http://motherShaker.students.nomoredomains.monster',//'https://auth.nomoreparties.co',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   },
-});
+}); */

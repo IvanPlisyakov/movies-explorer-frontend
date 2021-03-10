@@ -1,6 +1,7 @@
 import React from 'react';
 import './Movies.css';
 
+import { useRouteMatch } from 'react-router-dom';
 import Header from '../Header/Header';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
@@ -8,6 +9,11 @@ import Preloader from '../Preloader/Preloader';
 import Footer from '../Footer/Footer';
 
 function Movies(props) {
+  const { path } = useRouteMatch();
+  React.useEffect(() => {
+    localStorage.setItem('path', path);
+  }, []);
+
   const [screenWidth, setScreenWidth] = React.useState(document.documentElement.clientWidth);
   function handleWindowResize() {
     setScreenWidth(document.documentElement.clientWidth);
@@ -61,7 +67,7 @@ function Movies(props) {
 
     switch (true) {
       case screenWidth >= 1262:
-        return setQuantityMovies(quantityMovies + 33);
+        return setQuantityMovies(quantityMovies + 3);
       case screenWidth <= 1262 && screenWidth >= 740:
         return setQuantityMovies(quantityMovies + 2);
       default:
@@ -83,7 +89,7 @@ function Movies(props) {
       return <p className="movies__text movies__text_opacity">Пожалуйста, сделайте запрос</p>;
     }
     if (filterMovies.slice(0, quantityMovies).length === 0) {
-      console.log(typeof filterMovies);
+      console.log(filterMovies);
       return <p className="movies__text">Фильмы не найдены</p>;
     }
     return <MoviesCardList cards={filterMovies.slice(0, quantityMovies)} handleButtonSave={handleButtonSave} type={'movies'} />;

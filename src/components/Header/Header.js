@@ -8,7 +8,6 @@ import NavTab from '../NavTab/NavTab';
 function Header() {
   const { path } = useRouteMatch();
   return (
-  <>
     <header className={`header ${path === '/' ? 'header_background-color' : ''} `}>
       <div className={`header__column ${path === '/signup' || path === '/signin' ? 'header__column_display_grid' : ''}`}>
         <Link to="/" className="header__logo">
@@ -17,7 +16,6 @@ function Header() {
         <NavTab />
       </div>
     </header>
-  </>
   );
 }
 

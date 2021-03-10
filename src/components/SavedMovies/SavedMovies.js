@@ -1,6 +1,7 @@
 import React from 'react';
 import './SavedMovies.css';
 
+import { useRouteMatch } from 'react-router-dom';
 import Header from '../Header/Header';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
@@ -8,6 +9,11 @@ import Preloader from '../Preloader/Preloader';
 import Footer from '../Footer/Footer';
 
 function SavedMovies(props) {
+  const { path } = useRouteMatch();
+  React.useEffect(() => {
+    localStorage.setItem('path', path);
+  }, []);
+
   const [filterSavedMovies, setFilterSavedMovies] = React.useState('');
 
   function filterReadyMovies(string, shortMovieIs) {

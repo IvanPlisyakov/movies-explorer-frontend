@@ -5,6 +5,8 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './components/App/App';
 import reportWebVitals from './reportWebVitals';
 
+import { FormValidator } from './utils/FormValidator';
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter >
@@ -13,6 +15,17 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root'),
 );
+
+const formValidator = new FormValidator({
+  classForm: '.form',
+  classInput: '.form__input',
+  inputInActive: 'form__input_inactive',
+  classButtonSubmit: '.button-submit__button',
+  buttonSubmitDisabled: 'button-submit__button_disabled',
+  // errorSpanActive: 'form__input_active',
+  // errorSpanInActive: 'form__input_inactive',
+});
+formValidator.enableValidation();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

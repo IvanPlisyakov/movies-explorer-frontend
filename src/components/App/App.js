@@ -15,61 +15,51 @@ import Register from '../Register/Register';
 import Login from '../Login/Login';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import InfoTooltip from '../InfoTooltip/InfoTooltip';
 // api
-import { mainApi } from '../../utils/MainApi';
-import { moviesApi } from '../../utils/MoviesApi';
-
-const massCards = [
-  {
-    image: 'https://sun9-69.userapi.com/g-fuJN4BiDOSrBJOQ6LzvFdB85NqhfeWPn_x5w/A4KhXjMGf_s.jpg',
-    duration: 127,
-    nameRU: 'Котики',
-    saved: true,
-  },
-  {
-    image: 'https://demotivation.ru/wp-content/uploads/2020/04/100325-yana.jpg',
-    duration: 54,
-    nameRU: 'ФФФФ',
-    saved: false,
-  },
-  {
-    image: 'https://proprikol.ru/wp-content/uploads/2020/08/krasivye-kartinki-kotikov-60.jpg',
-    duration: 127,
-    nameRU: 'ФФФФФФФФФФФФФФФФФФФФФФФФФФФ vr ФФФФФФФФФФФФФФФФФФФФФФФФФФФ ФФФФФФФФФФФФФФФФФФФФФФФФФФФ ФФФФФФФФФФФФФФФФФФФФФФФФФФФ ФФФФФФФФФФФФФФФФФФФФФФФФФФФ ФФФФФФФФФФФФФФФФФФФФФФФФФФФ',
-    saved: false,
-  },
-  {
-    image: 'https://demotivation.ru/wp-content/uploads/2020/04/100325-yana.jpg',
-    duration: 54,
-    nameRU: 'ФФФФФФФФФФФФФФФФФФФФФФФФФФФ vr ФФФФФФФФФФФФФФФФФФФФФФФФФФФ ФФФФФФФФФФФФФФФФФФФФФФФФФФФ ФФФФФФФФФФФФФФФФФФФФФФФФФФФ ФФФФФФФФФФФФФФФФФФФФФФФФФФФ ФФФФФФФФФФФФФФФФФФФФФФФФФФФ',
-    saved: true,
-  },
-];
-
-const massSavedCards = [
-  {
-    image: 'https://sun9-69.userapi.com/g-fuJN4BiDOSrBJOQ6LzvFdB85NqhfeWPn_x5w/A4KhXjMGf_s.jpg',
-    duration: 127,
-    nameRU: 'Котики',
-  },
-  {
-    image: 'https://demotivation.ru/wp-content/uploads/2020/04/100325-yana.jpg',
-    duration: 54,
-    nameRU: 'ФФФФ',
-  },
-];
+import { MainApi } from '../../utils/MainApi';
+import { MoviesApi } from '../../utils/MoviesApi';
 
 function App() {
+  // api errors
+  const [infoTooltip, setInfoTooltip] = React.useState({ isOpen: false, isCare: false, text: '' });
+
+  function closeInfoTooltip() {
+    setInfoTooltip({ isOpen: true, isCare: true, text: infoTooltip.text });
+    setTimeout(setInfoTooltip, 0.9 * 1000, { isOpen: false, isCare: false, text: '' });
+  }
+
+  function openInfoTooltip(text) {
+    setInfoTooltip({ isOpen: true, isCare: false, text });
+    setTimeout(closeInfoTooltip, 10 * 1000);
+  }
+  // api
+  const mainApi = new MainApi({
+    baseUrl: 'http://localhost:3001', // 'https://api.deadinside.students.nomoredomains.monster', // 'http://localhost:3000',//'http://motherShaker.students.nomoredomains.monster',//'https://auth.nomoreparties.co',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  }, openInfoTooltip);
+
+  const moviesApi = new MoviesApi({
+    baseUrlBeatFilm: 'https://api.nomoreparties.co/beatfilm-movies', // 'http://localhost:3000',//'http://motherShaker.students.nomoredomains.monster',//'https://auth.nomoreparties.co',
+    baseUrl: 'http://localhost:3001', // 'https://api.deadinside.students.nomoredomains.monster',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  }, openInfoTooltip);
+
   function sendStandartCatch(err) {
     console.log(err);
   }
-
+  // help
   const history = useHistory();
-
-  const [loggedIn, setLoggedIn] = React.useState(false);
-
+  // userData api
   const [currentUser, setCurrentUser] = React.useState({});
 
+  const [loggedIn, setLoggedIn] = React.useState(false);
   function handleLogin() {
     setLoggedIn(true);
   }
@@ -78,35 +68,38 @@ function App() {
     mainApi.getContent()
       .then((res) => {
         setCurrentUser(res);
-      });
+      })
+      .catch((err) => sendStandartCatch(err));
   }
 
   function handleSubmitLogin(inputData) {
-    mainApi.authorize(inputData.email, inputData.password)
+    return mainApi.authorize(inputData.email, inputData.password)
       .then((data) => {
-        /* if (!data) {
-          handleInfoTooltipBadlyOpen();
-        } */
         if (data.token) {
-          // handleInfoTooltipOkOpen();
           handleLogin();
           history.push('/movies');
           getUserData();
         }
       })
-      .catch((err) => { console.log(err); });
+      .catch((err) => sendStandartCatch(err));
   }
 
   function handleSubmitRegister(inputData) {
-    mainApi.register(inputData.name, inputData.email, inputData.password)
+    return mainApi.register(inputData.name, inputData.email, inputData.password)
       .then((res) => {
         if (res) {
-          // handleInfoTooltipOkOpen();
           history.push('/signin');
-        } else {
-          // handleInfoTooltipBadlyOpen();
         }
-      });
+      })
+      .catch((err) => sendStandartCatch(err));
+  }
+
+  function changeUser(email, name) {
+    mainApi.changeProfile(email, name)
+      .then((data) => {
+        setCurrentUser(data);
+      })
+      .catch((err) => sendStandartCatch(err));
   }
 
   function tokenCheck() {
@@ -115,7 +108,10 @@ function App() {
         .then((userData) => {
           setCurrentUser(userData);
           setLoggedIn(true);
-          history.push('/movies');
+          // history.push('/movies');
+          if (localStorage.getItem('path')) {
+            history.push(localStorage.getItem('path'));
+          }
         });
     } else {
       setLoggedIn(false);
@@ -125,7 +121,7 @@ function App() {
   React.useEffect(() => {
     tokenCheck();
   }, []);
-
+  // moviesData api
   const [preloaderMoviesIsActive, setPreloaderMoviesIsActive] = React.useState(false);
 
   const [savedMovies, setSavedMovies] = React.useState([]);
@@ -136,7 +132,7 @@ function App() {
         console.log(data);
         setSavedMovies(data);
       })
-      .catch((err) => { sendStandartCatch(err); });
+      .catch((err) => sendStandartCatch(err));
   }
 
   function getMovies() {
@@ -146,45 +142,16 @@ function App() {
         setPreloaderMoviesIsActive(false);
         return data;
       })
-      .catch((err) => { sendStandartCatch(err); });
+      .catch((err) => sendStandartCatch(err));
   }
 
   function getSavedMoviesPromise() {
     return moviesApi.getInitialSavedMovies()
       .then((data) => data)
-      .catch((err) => { sendStandartCatch(err); });
+      .catch((err) => sendStandartCatch(err));
   }
 
   const [readyMovies, setReadyMovies] = React.useState([]);
-  const [quantityMovies, setQuantityMovies] = React.useState(100);
-
-  const [screenWidth, setScreenWidth] = React.useState(document.documentElement.clientWidth);
-  function handleWindowResize() {
-    setScreenWidth(document.documentElement.clientWidth);
-  }
-  window.addEventListener('resize', handleWindowResize);
-
-  /* function countingNumberMovies(variable, callback) {
-    if (variable === 0) {
-      switch (true) {
-        case screenWidth >= 1262:
-          return callback(12);
-        case screenWidth <= 1262 && screenWidth >= 740:
-          return callback(8);
-        default:
-          return callback(5);
-      }
-    }
-
-    switch (true) {
-      case screenWidth >= 1262:
-        return callback(variable + 33);
-      case screenWidth <= 1262 && screenWidth >= 740:
-        return callback(variable + 2);
-      default:
-        return callback(variable + 2);
-    }
-  } */
 
   function getAllMovies() {
     Promise.all([getMovies(), getSavedMoviesPromise()])
@@ -195,14 +162,22 @@ function App() {
           movie.saved = savedIs;
           return movie;
         }));
-      });
+      })
+      .catch((err) => sendStandartCatch(err));
   }
 
   function saveMovie(movie) {
-    moviesApi.saveMovie(movie)
+    return moviesApi.saveMovie(movie)
       .then((data) => {
+        /* const newReadyMovies = readyMovies;
+
+        newReadyMovies[data.id].saved = true;
+        console.log(newReadyMovies[data.id]);
+        setReadyMovies(newReadyMovies);
+        console.log(newReadyMovies); */
         console.log(data);
-      });
+      })
+      .catch((err) => sendStandartCatch(err));
   }
 
   function deleteMovie(idMovie) {
@@ -215,21 +190,15 @@ function App() {
           setSavedMovies(newSavedCards);
         }
         return Promise.reject(`Ошибка`);
-      });
+      })
+      .catch((err) => sendStandartCatch(err));
   }
-
-  function changeUser(email, name) {
-    mainApi.changeProfile(email, name)
-      .then((data) => {
-        setCurrentUser(data);
-      });
-  }
-
-  /* React.useEffect(() => {
-    // getMovies();
-    console.log(getSavedMovies());
-  }, []); */
-
+  // path
+  React.useEffect(() => {
+    if (loggedIn) {
+      history.push(localStorage.getItem('path'));
+    }
+  }, []);
   return (
   <CurrentUserContext.Provider value={currentUser}>
     <LoggedInContext.Provider value={loggedIn}>
@@ -283,6 +252,12 @@ function App() {
            <PageNotFound />
           </Route>
         </Switch>
+        <InfoTooltip
+          isOpen={infoTooltip.isOpen}
+          isCare={infoTooltip.isCare}
+          text={infoTooltip.text}
+          closeInfoTooltip={closeInfoTooltip}
+        />
       </div>
     </LoggedInContext.Provider>
   </CurrentUserContext.Provider>

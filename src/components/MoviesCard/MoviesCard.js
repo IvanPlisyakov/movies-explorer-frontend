@@ -9,6 +9,10 @@ function MoviesCard(props) {
   const [cardSavedValue, setCardSavedValue] = React.useState(props.card.saved);
   function clickButtonSave() {
     props.handleButtonSave(props.card);
+    console.log(props.handleButtonSave);
+    /* .then((res) => {
+        console.log(res);
+      }); */
     setCardSavedValue(true);
   }
 
