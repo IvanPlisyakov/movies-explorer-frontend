@@ -8,8 +8,23 @@ function Login(props) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
-  const handleEmailChange = (e) => setEmail(e.target.value);
-  const handlePasswordChange = (e) => setPassword(e.target.value);
+  const [passwordError, setPasswordError] = React.useState('Заполните это поле.');
+  const [emailError, setEmailError] = React.useState('Заполните это поле.');
+
+  function checkButtonDisabled() {
+    return (passwordError === '' && emailError === '');
+  }
+  const submitButtonDisabled = checkButtonDisabled();
+
+  function handleEmailChange(e) {
+    setEmail(e.target.value);
+    setEmailError(e.target.validationMessage);
+  }
+
+  function handlePasswordChange(e) {
+    setPassword(e.target.value);
+    setPasswordError(e.target.validationMessage);
+  }
 
   const [formDisabledActive, setFormDisabledActive] = React.useState(false);
 
@@ -52,7 +67,7 @@ function Login(props) {
               disabled={formDisabledActive}
               required
             />
-            <span className="form__error" id="email-input-error"></span>
+            <span className="form__error" id="email-input-error">{emailError}</span>
           </label>
           <label className="form__label">
             <p className="form__text">Пароль</p>
@@ -61,12 +76,13 @@ function Login(props) {
               name="login"
               id="password-input"
               type="password"
+              minLength="8"
               value={password}
               onChange={handlePasswordChange}
               disabled={formDisabledActive}
               required
             />
-            <span className="form__error" id="password-input-error"></span>
+            <span className="form__error" id="password-input-error">{passwordError}</span>
           </label>
           <div className="login__air-block"></div>
           <ButtonSubmit
@@ -75,7 +91,7 @@ function Login(props) {
             text="Ещё не зарегистрированы?"
             link__link="./signup"
             link__text="Регистрация"
-            disabled={formDisabledActive}
+            disabled={formDisabledActive || !submitButtonDisabled}
           />
         </form>
       </div>

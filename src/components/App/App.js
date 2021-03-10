@@ -35,7 +35,7 @@ function App() {
   }
   // api
   const mainApi = new MainApi({
-    baseUrl: 'https://api.deadinside.students.nomoredomains.monster', // 'http://localhost:3000',//'http://motherShaker.students.nomoredomains.monster',//'https://auth.nomoreparties.co',
+    baseUrl: 'http://api.deadinside.students.nomoredomains.monster', // 'https://auth.nomoreparties.co', // 'http://localhost:3000',//'http://motherShaker.students.nomoredomains.monster',//'https://auth.nomoreparties.co',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ function App() {
 
   const moviesApi = new MoviesApi({
     baseUrlBeatFilm: 'https://api.nomoreparties.co/beatfilm-movies', // 'http://localhost:3000',//'http://motherShaker.students.nomoredomains.monster',//'https://auth.nomoreparties.co',
-    baseUrl: 'https://api.deadinside.students.nomoredomains.monster',
+    baseUrl: 'http://api.deadinside.students.nomoredomains.monster',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -75,11 +75,16 @@ function App() {
   function handleSubmitLogin(inputData) {
     return mainApi.authorize(inputData.email, inputData.password)
       .then((data) => {
-        if (data.token) {
-          handleLogin();
-          history.push('/movies');
-          getUserData();
+        if (data !== undefined) {
+          if (data.token) {
+            handleLogin();
+            history.push('/movies');
+            getUserData();
+            return;
+          }
         }
+
+        openInfoTooltip('Неправлильные почта или пароль');
       })
       .catch((err) => sendStandartCatch(err));
   }

@@ -26,26 +26,19 @@ function Profile(props) {
   const [nameError, setNameError] = React.useState('');
   const [emailError, setEmailError] = React.useState('');
 
-  const [submitButtonDisabled, setSubmitButtonDisabled] = React.useState(false);
-
-  function checkButtonDisabled(e) {
-    if (!e.target.validity.valid) {
-      setSubmitButtonDisabled(true);
-    } else {
-      setSubmitButtonDisabled(false);
-    }
+  function checkButtonDisabled() {
+    return !(nameError === '' && emailError === '');
   }
+  const submitButtonDisabled = checkButtonDisabled();
 
   function handleChangeName(e) {
     setName(e.target.value);
     setNameError(e.target.validationMessage);
-    checkButtonDisabled(e);
   }
 
   function handleChangeEmail(e) {
     setEmail(e.target.value);
     setEmailError(e.target.validationMessage);
-    checkButtonDisabled(e);
   }
 
   function signOut() {

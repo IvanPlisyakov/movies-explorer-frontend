@@ -4,25 +4,32 @@ import './Register.css';
 import Header from '../Header/Header';
 import ButtonSubmit from '../ButtonSubmit/ButtonSubmit';
 
-import { FormValidator } from '../../utils/FormValidator';
-
-const tuningValidation = {
-  form: '.profile-form',
-  inputTypeError: 'profile-form__user_type_error',
-  inputErrorActive: 'profile-form__user-error_active',
-  formInput: '.profile-form__user',
-  formSubmit: '.profile-form__btn-save',
-  buttonInctive: 'profile-form__btn-save_inactive',
-};
-
 function Register(props) {
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
-  const handleNameChange = (e) => setName(e.target.value);
-  const handleEmailChange = (e) => setEmail(e.target.value);
-  const handlePasswordChange = (e) => setPassword(e.target.value);
+  const [nameError, setNameError] = React.useState('Заполните это поле.');
+  const [emailError, setEmailError] = React.useState('Заполните это поле.');
+  const [passwordError, setPasswordError] = React.useState('Заполните это поле.');
+
+  function checkButtonDisabled() {
+    return (passwordError === '' && emailError === '' && nameError === '');
+  }
+  const submitButtonDisabled = checkButtonDisabled();
+
+  function handleNameChange(e) {
+    setName(e.target.value);
+    setNameError(e.target.validationMessage);
+  }
+  function handleEmailChange(e) {
+    setEmail(e.target.value);
+    setEmailError(e.target.validationMessage);
+  }
+  function handlePasswordChange(e) {
+    setPassword(e.target.value);
+    setPasswordError(e.target.validationMessage);
+  }
 
   const [formDisabledActive, setFormDisabledActive] = React.useState(false);
 
@@ -69,7 +76,7 @@ function Register(props) {
               maxLength="30"
               required
             />
-            <span className="form__error" id="name-input-error"></span>
+            <span className="form__error" id="name-input-error">{nameError}</span>
           </label>
           <label className="form__label">
             <p className="form__text">E-mail</p>
@@ -83,7 +90,7 @@ function Register(props) {
               disabled={formDisabledActive}
               required
             />
-            <span className="form__error" id="email-input-error"></span>
+            <span className="form__error" id="email-input-error">{emailError}</span>
           </label>
           <label className="form__label">
             <p className="form__text">Пароль</p>
@@ -91,12 +98,13 @@ function Register(props) {
               name="registration"
               id="password-input"
               type="password"
+              minLength="8"
               value={password}
               onChange={handlePasswordChange}
               disabled={formDisabledActive}
               required
             />
-            <span className="form__error" id="password-input-error"></span>
+            <span className="form__error" id="password-input-error">{passwordError}</span>
           </label>
           <div className="register__air-block"></div>
           <ButtonSubmit
@@ -105,7 +113,7 @@ function Register(props) {
             text="Уже зарегистрированы?"
             link__link="./signin"
             link__text="Войти"
-            disabled={formDisabledActive}
+            disabled={formDisabledActive || !submitButtonDisabled}
           />
         </form>
       </div>
