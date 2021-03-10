@@ -35,7 +35,7 @@ function App() {
   }
   // api
   const mainApi = new MainApi({
-    baseUrl: 'http://localhost:3001', // 'https://api.deadinside.students.nomoredomains.monster', // 'http://localhost:3000',//'http://motherShaker.students.nomoredomains.monster',//'https://auth.nomoreparties.co',
+    baseUrl: 'https://api.deadinside.students.nomoredomains.monster', // 'http://localhost:3000',//'http://motherShaker.students.nomoredomains.monster',//'https://auth.nomoreparties.co',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ function App() {
 
   const moviesApi = new MoviesApi({
     baseUrlBeatFilm: 'https://api.nomoreparties.co/beatfilm-movies', // 'http://localhost:3000',//'http://motherShaker.students.nomoredomains.monster',//'https://auth.nomoreparties.co',
-    baseUrl: 'http://localhost:3001', // 'https://api.deadinside.students.nomoredomains.monster',
+    baseUrl: 'https://api.deadinside.students.nomoredomains.monster',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
