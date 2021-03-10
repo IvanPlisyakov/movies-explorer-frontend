@@ -44,6 +44,7 @@ function Profile(props) {
   function signOut() {
     props.setLoggedIn(false);
     localStorage.removeItem('jwt');
+    localStorage.removeItem('movies');
     history.push('/');
     localStorage.setItem('path', '/');
   }

@@ -35,7 +35,7 @@ function App() {
   }
   // api
   const mainApi = new MainApi({
-    baseUrl: 'http://api.deadinside.students.nomoredomains.monster', // 'https://auth.nomoreparties.co', // 'http://localhost:3000',//'http://motherShaker.students.nomoredomains.monster',//'https://auth.nomoreparties.co',
+    baseUrl: 'https://api.deadinside.students.nomoredomains.monster', // 'https://auth.nomoreparties.co', // 'http://localhost:3000',//'http://motherShaker.students.nomoredomains.monster',//'https://auth.nomoreparties.co',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ function App() {
 
   const moviesApi = new MoviesApi({
     baseUrlBeatFilm: 'https://api.nomoreparties.co/beatfilm-movies', // 'http://localhost:3000',//'http://motherShaker.students.nomoredomains.monster',//'https://auth.nomoreparties.co',
-    baseUrl: 'http://api.deadinside.students.nomoredomains.monster',
+    baseUrl: 'https://api.deadinside.students.nomoredomains.monster',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -159,16 +159,22 @@ function App() {
   const [readyMovies, setReadyMovies] = React.useState([]);
 
   function getAllMovies() {
-    Promise.all([getMovies(), getSavedMoviesPromise()])
-      .then((res) => {
-        setReadyMovies(res[0].map((movie) => {
-          const savedIs = res[1].some((savedMovie) => Number(movie.id) === Number(savedMovie.id));
+    if (!localStorage.getItem('movies')) {
+      Promise.all([getMovies(), getSavedMoviesPromise()])
+        .then((res) => {
+          const rdyMovies = res[0].map((movie) => {
+            const savedIs = res[1].some((savedMovie) => Number(movie.id) === Number(savedMovie.id));
 
-          movie.saved = savedIs;
-          return movie;
-        }));
-      })
-      .catch((err) => sendStandartCatch(err));
+            movie.saved = savedIs;
+            return movie;
+          });
+          setReadyMovies(rdyMovies);
+          localStorage.setItem('movies', JSON.stringify(rdyMovies));
+        })
+        .catch((err) => sendStandartCatch(err));
+    } else {
+      setReadyMovies(JSON.parse(localStorage.getItem('movies')));
+    }
   }
 
   function saveMovie(movie) {
