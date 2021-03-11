@@ -2,18 +2,17 @@
   width: 100%;
   display: grid;
   grid-template-rows: min-content;
-  row-gap: 10px;
+  row-gap: 15px;
 }
 
 .form__label {
   display: grid;
   grid-template-rows: repeat(2, min-content) 12px;
-  row-gap: 10px;
 }
 
 .form__text {
   color: #A0A0A0;
-  margin: 0;
+  margin: 0 0 10px 0;
   font-family: Inter, Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
@@ -24,7 +23,7 @@
 .form__input {
   background-color: #F4F4F4;
   border-radius: 8px;  
-  border: none;
+  border: 1px solid #F4F4F4;
   outline: none;
   font-family: Inter, Arial, sans-serif;
   font-style: normal;
@@ -32,10 +31,15 @@
   font-size: 13px;
   line-height: 16px;
   padding: 15px;
+  box-sizing: border-box;
 }
 
-.form__input_error {
-  color: #EE3465;
+.form__input_disabled {
+  color: grey;
+}
+
+.form__input_inactive {
+  border: 1px solid #EE3465;
 }
 
 .form__error {

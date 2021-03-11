@@ -4,7 +4,7 @@ import './SearchForm.css';
 import searchFormIcon from '../../images/search-form__icon.svg';
 import searchFormReset from '../../images/search-form__reset.svg';
 
-function SearchForm() {
+function SearchForm(props) {
   const [reset, setReset] = React.useState(false);
   function checkValueInput(e) {
     if (e.target.value === '') {
@@ -36,6 +36,10 @@ function SearchForm() {
     setCheckbox(!checkbox);
   }
 
+  function handleSubmitButton() {
+    props.filterReadyMovies(movie, checkbox);
+  }
+
   const searchForm = (
     <div className="search-form__form">
       <div className={`search-form__checkbox ${checkbox === true ? 'search-form__checkbox_active' : 'search-form__checkbox_inactive'}`} onClick={handleCheckbox}>
@@ -52,7 +56,7 @@ function SearchForm() {
           <img className="search-form__icon" src={searchFormIcon} alt="Инкона лупы" />
           <input className="search-form__input" value={movie} onChange={handleChangeMovie} type="text" placeholder="Фильм" required/>
           <img className={`search-form__reset ${reset === false ? 'search-form__reset_inactive' : ''}`} src={searchFormReset} alt="Копка, стирающая поля ввода" onClick={clearInput} />
-          <div className="search-form__search"></div>
+          <div className="search-form__search" onClick={handleSubmitButton}></div>
         </div>
         {screenWidth >= 723 && searchForm}
       </div>
