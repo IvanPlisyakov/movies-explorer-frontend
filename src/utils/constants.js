@@ -80,7 +80,7 @@ export const translations = {
         "Portfolio",
         "Static website",
         "Adaptive website",
-        "Single-page application",
+        "Single-page react application",
       ],
       footer: [
         "Yandex.Praktikum x BeatFilm learning project.",
@@ -154,7 +154,7 @@ export const translations = {
         "Портфолио",
         "Статичный сайт",
         "Адаптивный сайт",
-        "Одностраничное приложение",
+        "Одностраничное react приложение",
       ],
       footer: [
         "Учебный проект Яндекс.Практикум х BeatFilm.",

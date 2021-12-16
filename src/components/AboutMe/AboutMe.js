@@ -36,7 +36,7 @@ function AboutMe() {
             <p className="about-me__portfolio-text">{translations[translationContext].main.aboutMe[6]}</p>
             <p className="about-me__portfolio-icon">&#8599;</p>
           </a>
-          <a className="about-me__portfolio-link" href="https://ivanplisyakov.github.io/mesto/" target="_blank" rel="noreferrer">
+          <a className="about-me__portfolio-link" href="https://react-mesto-auth-chi.vercel.app/signin" target="_blank" rel="noreferrer">
             <p className="about-me__portfolio-text">{translations[translationContext].main.aboutMe[7]}</p>
             <p className="about-me__portfolio-icon">&#8599;</p>
           </a>
