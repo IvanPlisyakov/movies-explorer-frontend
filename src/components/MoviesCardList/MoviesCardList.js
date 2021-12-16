@@ -4,6 +4,7 @@ import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
 function MoviesCardList(props) {
+  // console.log(props.cards);
   return (
     <section className="movies-card-list">
       <div className="movies-card-list__column">

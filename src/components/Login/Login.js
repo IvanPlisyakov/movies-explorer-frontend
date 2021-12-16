@@ -3,8 +3,12 @@ import './Login.css';
 
 import Header from '../Header/Header';
 import ButtonSubmit from '../ButtonSubmit/ButtonSubmit';
+import { TranslationContext } from '../../contexts/translationContext.js';
+import { translations } from '../../utils/constants.js';
 
 function Login(props) {
+  const translationContext = React.useContext(TranslationContext);
+
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -70,7 +74,7 @@ function Login(props) {
             <span className="form__error" id="email-input-error">{emailError}</span>
           </label>
           <label className="form__label">
-            <p className="form__text">Пароль</p>
+            <p className="form__text">{translations[translationContext].sign[1]}</p>
             <input
               className={`form__input ${formDisabledActive ? 'form__input_disabled' : ''}`}
               name="login"
@@ -87,10 +91,10 @@ function Login(props) {
           <div className="login__air-block"></div>
           <ButtonSubmit
             handleSubmit={handleSubmit}
-            buttonText="Войти"
-            text="Ещё не зарегистрированы?"
+            buttonText={translations[translationContext].sign[4]}
+            text={translations[translationContext].sign[5]}
             link__link="./signup"
-            link__text="Регистрация"
+            link__text={translations[translationContext].sign[6]}
             disabled={formDisabledActive || !submitButtonDisabled}
           />
         </form>

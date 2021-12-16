@@ -3,11 +3,15 @@ import { NavLink, Link, useRouteMatch } from 'react-router-dom';
 import './NavTab.css';
 
 import { LoggedInContext } from '../../contexts/LoggedInContext.js';
+import { TranslationContext } from '../../contexts/translationContext.js';
+import { translations } from '../../utils/constants.js';
 
 import navTabLinkAccountIcon from '../../images/nav-tab__link-account-icon.svg';
 import asideBarReset from '../../images/nav-tab__aside-bar-reset.svg';
 
 function NavTab() {
+  const translationContext = React.useContext(TranslationContext);
+
   const { path } = useRouteMatch();
 
   const loggedIn = React.useContext(LoggedInContext);
@@ -31,10 +35,10 @@ function NavTab() {
       if (screenWidth >= 1245) {
         return (
         <>
-          <NavLink to="/movies" className="nav-tab__link-movies" activeClassName="nav-tab__link-movies_active">Фильмы</NavLink>
-          <NavLink to="/saved-movies" className="nav-tab__link-movies" activeClassName="nav-tab__link-movies_active">Сохранённые фильмы</NavLink>
+          <NavLink to="/movies" className="nav-tab__link-movies" activeClassName="nav-tab__link-movies_active">{translations[translationContext].navTab[1]}</NavLink>
+          <NavLink to="/saved-movies" className="nav-tab__link-movies" activeClassName="nav-tab__link-movies_active">{translations[translationContext].navTab[2]}</NavLink>
           <NavLink to="/profile" className="nav-tab__link-account" activeClassName="nav-tab__link-account_active">
-            <p className="nav-tab__link-account-text">Аккаунт</p>
+            <p className="nav-tab__link-account-text">{translations[translationContext].navTab[3]}</p>
             <div className="nav-tab__link-account-overlay">
               <img className="nav-tab__link-account-icon" src={navTabLinkAccountIcon} alt="Икнока профиля" />
             </div>
@@ -50,18 +54,18 @@ function NavTab() {
     switch (path) {
       case '/signup':
         return (
-          <p className="nav-tab__greeting">Добро пожаловать!</p>
+          <p className="nav-tab__greeting">{translations[translationContext].navTab[4]}</p>
         );
 
       case '/signin':
         return (
-          <p className="nav-tab__greeting">Рады видеть!</p>
+          <p className="nav-tab__greeting">{translations[translationContext].navTab[5]}</p>
         );
       default:
         return (
             <>
-              <Link to="/signup" className="nav-tab__link-register">Регистрация</Link>
-              <Link to="/signin" className="nav-tab__link-login">Войти</Link>
+              <Link to="/signup" className="nav-tab__link-register">{translations[translationContext].navTab[6]}</Link>
+              <Link to="/signin" className="nav-tab__link-login">{translations[translationContext].navTab[7]}</Link>
             </>
         );
     }
@@ -69,7 +73,7 @@ function NavTab() {
   const navigation = createNav();
 
   return (
-    <>
+      <>
         <nav className="nav-tab">
           {navigation}
         </nav>
@@ -79,13 +83,13 @@ function NavTab() {
           <div className="nav-tab__aside-bar__column">
             <img className="nav-tab__aside-bar-reset" src={asideBarReset} alt="Кнопка закрытия боковой панели" onClick={handleInActiveAside} />
             <div className="nav-tab__aside-bar-links">
-              <NavLink className="nav-tab__aside-bar-link" activeClassName="nav-tab__aside-bar-link_active" exact to="/" >Главная</NavLink>
-              <NavLink className="nav-tab__aside-bar-link" activeClassName="nav-tab__aside-bar-link_active" to="/movies" >Фильмы</NavLink>
-              <NavLink className="nav-tab__aside-bar-link" activeClassName="nav-tab__aside-bar-link_active" to="/saved-movies" >Сохранённые фильмы</NavLink>
+              <NavLink className="nav-tab__aside-bar-link" activeClassName="nav-tab__aside-bar-link_active" exact to="/" >{translations[translationContext].navTab[0]}</NavLink>
+              <NavLink className="nav-tab__aside-bar-link" activeClassName="nav-tab__aside-bar-link_active" to="/movies" >{translations[translationContext].navTab[1]}</NavLink>
+              <NavLink className="nav-tab__aside-bar-link" activeClassName="nav-tab__aside-bar-link_active" to="/saved-movies" >{translations[translationContext].navTab[2]}</NavLink>
             </div>
           </div>
           <NavLink to="/profile" className="nav-tab__link-account nav-tab__link-account_margin" activeClassName="nav-tab__link-account_active">
-            <p className="nav-tab__link-account-text">Аккаунт</p>
+            <p className="nav-tab__link-account-text">{translations[translationContext].navTab[3]}</p>
             <div className="nav-tab__link-account-overlay">
               <img className="nav-tab__link-account-icon" src={navTabLinkAccountIcon} alt="Икнока профиля" />
             </div>

@@ -6,6 +6,8 @@ import './App.css';
 // context
 import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 import { LoggedInContext } from '../../contexts/LoggedInContext.js';
+import { TranslationContext } from '../../contexts/translationContext.js';
+import { SetLangContext } from '../../contexts/setLangContext.js';
 // components
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
@@ -21,6 +23,7 @@ import { MainApi } from '../../utils/MainApi';
 import { MoviesApi } from '../../utils/MoviesApi';
 
 function App() {
+  const [lang, setLang] = React.useState('true');
   // api errors
   const [infoTooltip, setInfoTooltip] = React.useState({ isOpen: false, isCare: false, text: '' });
 
@@ -35,16 +38,16 @@ function App() {
   }
   // api
   const mainApi = new MainApi({
-    baseUrl: 'https://api.deadinside.students.nomoredomains.monster', // 'https://auth.nomoreparties.co', // 'http://localhost:3000',//'http://motherShaker.students.nomoredomains.monster',//'https://auth.nomoreparties.co',
+    baseUrl: 'https://movies-explorer-api-cnb68dak0-ivanplisyakov.vercel.app', // 'https://api.deadinside.students.nomoredomains.monster', // 'https://auth.nomoreparties.co', // 'http://localhost:3000',//'http://motherShaker.students.nomoredomains.monster',//'https://auth.nomoreparties.co',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-  }, openInfoTooltip);
+  }, openInfoTooltip, lang);
 
   const moviesApi = new MoviesApi({
     baseUrlBeatFilm: 'https://api.nomoreparties.co/beatfilm-movies', // 'http://localhost:3000',//'http://motherShaker.students.nomoredomains.monster',//'https://auth.nomoreparties.co',
-    baseUrl: 'https://api.deadinside.students.nomoredomains.monster',
+    baseUrl: 'https://movies-explorer-api-cnb68dak0-ivanplisyakov.vercel.app',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -84,7 +87,7 @@ function App() {
           }
         }
 
-        openInfoTooltip('Неправлильные почта или пароль');
+        openInfoTooltip(lang === 'true' ? 'Incorrect mail or password' : 'Неправильные почта или пароль');
       })
       .catch((err) => sendStandartCatch(err));
   }
@@ -111,13 +114,20 @@ function App() {
     if (localStorage.getItem('jwt')) {
       mainApi.getContent()
         .then((userData) => {
-          setCurrentUser(userData);
-          setLoggedIn(true);
-          // history.push('/movies');
-          if (localStorage.getItem('path')) {
-            history.push(localStorage.getItem('path'));
+          // console.log(userData);
+          if (userData) {
+            setCurrentUser(userData);
+            setLoggedIn(true);
+            // history.push('/movies');
+            if (localStorage.getItem('path')) {
+              history.push(localStorage.getItem('path'));
+            }
+            return;
           }
-        });
+
+          return Promise.reject(`Ошибка 1`);
+        })
+        .catch((err) => sendStandartCatch(err));
     } else {
       setLoggedIn(false);
     }
@@ -152,7 +162,10 @@ function App() {
 
   function getSavedMoviesPromise() {
     return moviesApi.getInitialSavedMovies()
-      .then((data) => data)
+      .then((data) => {
+        console.log(data);
+        return data;
+      })
       .catch((err) => sendStandartCatch(err));
   }
 
@@ -186,21 +199,44 @@ function App() {
         console.log(newReadyMovies[data.id]);
         setReadyMovies(newReadyMovies);
         console.log(newReadyMovies); */
-        console.log(data);
+        const newReadyMovies = readyMovies.map((item) => {
+          if (item.id === data.id) {
+            item.saved = true;
+            return item;
+          }
+
+          return item;
+        });
+        setReadyMovies(newReadyMovies);
+        localStorage.setItem('movies', JSON.stringify(newReadyMovies));
       })
       .catch((err) => sendStandartCatch(err));
   }
 
-  function deleteMovie(idMovie) {
-    moviesApi.deleteMovie(idMovie)
+  function deleteMovie(_idMovie, idMovie) {
+    moviesApi.deleteMovie(_idMovie)
       .then((movie) => {
         if (movie) {
           const newSavedCards = savedMovies.filter((c) => {
-            return c._id !== idMovie;
+            return c._id !== _idMovie;
           });
           setSavedMovies(newSavedCards);
+
+          const newReadyMovies = readyMovies.map((item) => {
+            if (item.id === idMovie) {
+              item.saved = false;
+              return item;
+            }
+
+            return item;
+          });
+
+          setReadyMovies(newReadyMovies);
+          localStorage.setItem('movies', JSON.stringify(newReadyMovies));
+          return;
         }
-        return Promise.reject(`Ошибка`);
+
+        return Promise.reject(`Ошибка 2`);
       })
       .catch((err) => sendStandartCatch(err));
   }
@@ -209,67 +245,73 @@ function App() {
     if (loggedIn) {
       history.push(localStorage.getItem('path'));
     }
+    // getSavedMoviesPromise();
   }, []);
+
   return (
   <CurrentUserContext.Provider value={currentUser}>
     <LoggedInContext.Provider value={loggedIn}>
-      <div className="page">
-        <Switch>
-          <Route exact path="/">
-            <Main />
-          </Route>
-          <ProtectedRoute exact
-            redirect='/signin'
-            stateLogin={true}
-            path="/movies"
-            preloaderMoviesIsActive={preloaderMoviesIsActive}
-            readyMovies={readyMovies}
-            getAllMovies={getAllMovies}
-            saveMovie={saveMovie}
-            component={Movies}
-          />
-          <ProtectedRoute exact
-            redirect='/signin'
-            stateLogin={true}
-            path="/saved-movies"
-            deleteMovie={deleteMovie}
-            getSavedMovies={getSavedMovies}
-            component={SavedMovies}
-            savedMovies={savedMovies}
-          />
-          <ProtectedRoute exact
-            redirect='/signin'
-            stateLogin={true}
-            path="/profile"
-            setLoggedIn={setLoggedIn}
-            changeUser={changeUser}
-            component={Profile}
-          />
-          <ProtectedRoute exact
-            redirect='/movies'
-            stateLogin={false}
-            path="/signup"
-            handleSubmitLogin={handleSubmitRegister}
-            component={Register}
-          />
-          <ProtectedRoute exact
-            redirect='/movies'
-            stateLogin={false}
-            path="/signin"
-            handleSubmitLogin={handleSubmitLogin}
-            component={Login}
-          />
-          <Route path="*">
-           <PageNotFound />
-          </Route>
-        </Switch>
-        <InfoTooltip
-          isOpen={infoTooltip.isOpen}
-          isCare={infoTooltip.isCare}
-          text={infoTooltip.text}
-          closeInfoTooltip={closeInfoTooltip}
-        />
-      </div>
+      <TranslationContext.Provider value={lang}>
+        <SetLangContext.Provider value={setLang}>
+          <div className="page">
+            <Switch>
+              <Route exact path="/">
+                <Main />
+              </Route>
+              <ProtectedRoute exact
+                redirect='/signin'
+                stateLogin={true}
+                path="/movies"
+                preloaderMoviesIsActive={preloaderMoviesIsActive}
+                readyMovies={readyMovies}
+                getAllMovies={getAllMovies}
+                saveMovie={saveMovie}
+                component={Movies}
+              />
+              <ProtectedRoute exact
+                redirect='/signin'
+                stateLogin={true}
+                path="/saved-movies"
+                deleteMovie={deleteMovie}
+                getSavedMovies={getSavedMovies}
+                component={SavedMovies}
+                savedMovies={savedMovies}
+              />
+              <ProtectedRoute exact
+                redirect='/signin'
+                stateLogin={true}
+                path="/profile"
+                setLoggedIn={setLoggedIn}
+                changeUser={changeUser}
+                component={Profile}
+              />
+              <ProtectedRoute exact
+                redirect='/movies'
+                stateLogin={false}
+                path="/signup"
+                handleSubmitRegister={handleSubmitRegister}
+                component={Register}
+              />
+              <ProtectedRoute exact
+                redirect='/movies'
+                stateLogin={false}
+                path="/signin"
+                handleSubmitLogin={handleSubmitLogin}
+                component={Login}
+              />
+              <Route path="*">
+               <PageNotFound />
+              </Route>
+            </Switch>
+            <InfoTooltip
+              isOpen={infoTooltip.isOpen}
+              isCare={infoTooltip.isCare}
+              text={infoTooltip.text}
+              closeInfoTooltip={closeInfoTooltip}
+            />
+          </div>
+        </SetLangContext.Provider>
+      </TranslationContext.Provider>
     </LoggedInContext.Provider>
   </CurrentUserContext.Provider>
   );

@@ -27,7 +27,6 @@ function SavedMovies(props) {
     // props.getSavedMovies();
     props.getSavedMovies();
     // filterReadyMovies('', true);
-    // console.log(props.savedMovies);
   }, []);
 
   return (

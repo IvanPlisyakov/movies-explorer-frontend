@@ -8,7 +8,12 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
 import Footer from '../Footer/Footer';
 
+import { TranslationContext } from '../../contexts/translationContext.js';
+import { translations } from '../../utils/constants.js';
+
 function Movies(props) {
+  const translationContext = React.useContext(TranslationContext);
+
   const { path } = useRouteMatch();
   React.useEffect(() => {
     localStorage.setItem('path', path);
@@ -34,7 +39,7 @@ function Movies(props) {
       nameRU: String(card.nameRU),
       nameEN: String(card.nameEN),
     };
-    console.log(movie);
+    // console.log(movie);
     props.saveMovie(movie);
   }
 
@@ -76,6 +81,7 @@ function Movies(props) {
   }
 
   React.useEffect(() => {
+    // console.log("start");
     countingNumberMovies();
     props.getAllMovies();
   }, []);
@@ -86,11 +92,11 @@ function Movies(props) {
       return <Preloader />;
     }
     if (typeof filterMovies === 'string') {
-      return <p className="movies__text movies__text_opacity">Пожалуйста, сделайте запрос</p>;
+      return <p className="movies__text movies__text_opacity">{translations[translationContext].movies[0]}</p>;
     }
     if (filterMovies.slice(0, quantityMovies).length === 0) {
-      console.log(filterMovies);
-      return <p className="movies__text">Фильмы не найдены</p>;
+      // console.log(filterMovies);
+      return <p className="movies__text">{translations[translationContext].movies[1]}</p>;
     }
     return <MoviesCardList cards={filterMovies.slice(0, quantityMovies)} handleButtonSave={handleButtonSave} type={'movies'} />;
   }
@@ -105,7 +111,7 @@ function Movies(props) {
       {props.preloaderMoviesIsActive
       || filterMovies.length <= quantityMovies
         ? <></>
-        : <button className="movies__more" onClick={countingNumberMovies}>Ещё</button>
+        : <button className="movies__more" onClick={countingNumberMovies}>{translations[translationContext].movies[2]}</button>
       }
       <Footer />
     </div>

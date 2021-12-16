@@ -1,27 +1,28 @@
 export class MoviesApi {
-  constructor(data, errorCallback) {
+  constructor(data, errorCallback, lang) {
     this._baseUrlBeatFilm = data.baseUrlBeatFilm;
     this._baseUrl = data.baseUrl;
     this._headers = data.headers;
     this._errorCallback = errorCallback;
+    this._lang = (lang === 'true');
   }
 
   _standartErrorThen(res) {
     switch (res.status) {
       case 400:
-        this._errorCallback('Ошибка валидации');
+        this._errorCallback(this._lang ? 'Validation error' : 'Ошибка валидации');
         return;
       case 401:
-        this._errorCallback('Пользователь не авторизован');
+        this._errorCallback(this._lang ? 'User is not authorised' : 'Пользователь не авторизован');
         return;
       case 404:
-        this._errorCallback('Ресурс не найден');
+        this._errorCallback(this._lang ? 'Resource not found' : 'Ресурс не найден');
         return;
       case 409:
-        this._errorCallback('Конфликт на сервере');
+        this._errorCallback(this._lang ? 'Server conflict' : 'Конфликт на сервере');
         return;
       default:
-        this._errorCallback('Ошибка на сервере');
+        this._errorCallback(this._lang ? 'Error on the server' : 'Ошибка на сервере');
         return;
     }
   }

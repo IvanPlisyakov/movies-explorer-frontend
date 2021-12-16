@@ -201,6 +201,7 @@
   cursor: pointer;
   display: grid;
   align-items: center;
+  transition: 0.5s;
 }
 
 @media screen and (max-width: 740px) {
@@ -223,12 +224,16 @@
 }
 
 .search-form__checkbox_active {
+  background-color: #2BE080;
+}
+
+/*.search-form__checkbox_active {
   animation: checkboxActive 0.5s forwards;
 }
 
 .search-form__checkbox_inactive {
   animation: checkboxInActive 0.5s forwards;
-}
+}*/
 
 .search-form__checkbox-item {
   width: 16px;
@@ -236,17 +241,24 @@
   border-radius: 50%;
   background-color: #F5F5F5;
   margin: 0 2px;
+  transition: 0.5s;
 }
 
 .search-form__checkbox-item_active {
+  background-color: white;
+  margin-left: 18px;
+}
+
+/*.search-form__checkbox-item_active {
   animation: checkboxItemActive 0.5s forwards;
 }
 
 .search-form__checkbox-item_inactive {
   animation: checkboxItemInActive 0.5s forwards;
-}
+}*/
 
 .search-form__checkbox-title {
+  white-space: nowrap;
   margin: 0;
   font-family: Inter, Arial, sans-serif;
   font-style: normal;

@@ -3,8 +3,11 @@ import './Register.css';
 
 import Header from '../Header/Header';
 import ButtonSubmit from '../ButtonSubmit/ButtonSubmit';
+import { TranslationContext } from '../../contexts/translationContext.js';
 
 function Register(props) {
+  const translationContext = React.useContext(TranslationContext);
+
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -46,7 +49,7 @@ function Register(props) {
 
     blockingForm();
 
-    props.handleSubmitLogin({
+    props.handleSubmitRegister({
       name,
       email,
       password,
@@ -63,7 +66,7 @@ function Register(props) {
       <div className="register__column">
         <form className="form" name="registration">
           <label className="form__label">
-            <p className="form__text">Имя</p>
+            <p className="form__text">{translationContext.sign[0]}</p>
             <input
               className={`form__input ${formDisabledActive ? 'form__input_disabled' : ''}`}
               name="registration"
@@ -93,7 +96,7 @@ function Register(props) {
             <span className="form__error" id="email-input-error">{emailError}</span>
           </label>
           <label className="form__label">
-            <p className="form__text">Пароль</p>
+            <p className="form__text">{translationContext.sign[1]}</p>
             <input className={`form__input ${formDisabledActive ? 'form__input_disabled' : ''}`}
               name="registration"
               id="password-input"
@@ -109,10 +112,10 @@ function Register(props) {
           <div className="register__air-block"></div>
           <ButtonSubmit
             handleSubmit={handleSubmit}
-            buttonText="Зарегистрироваться"
-            text="Уже зарегистрированы?"
+            buttonText={translationContext.sign[2]}
+            text={translationContext.sign[3]}
             link__link="./signin"
-            link__text="Войти"
+            link__text={translationContext.sign[4]}
             disabled={formDisabledActive || !submitButtonDisabled}
           />
         </form>
