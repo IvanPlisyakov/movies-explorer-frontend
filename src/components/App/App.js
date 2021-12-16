@@ -193,12 +193,6 @@ function App() {
   function saveMovie(movie) {
     return moviesApi.saveMovie(movie)
       .then((data) => {
-        /* const newReadyMovies = readyMovies;
-
-        newReadyMovies[data.id].saved = true;
-        console.log(newReadyMovies[data.id]);
-        setReadyMovies(newReadyMovies);
-        console.log(newReadyMovies); */
         const newReadyMovies = readyMovies.map((item) => {
           if (item.id === data.id) {
             item.saved = true;
