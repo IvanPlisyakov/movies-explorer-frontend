@@ -2,24 +2,124 @@ import React from 'react';
 import './Register.css';
 
 import Header from '../Header/Header';
-import Form from '../Form/Form';
 import ButtonSubmit from '../ButtonSubmit/ButtonSubmit';
-import { dataInputsRegister } from '../../utils/constants';
+import { TranslationContext } from '../../contexts/translationContext.js';
+import { translations } from '../../utils/constants.js';
 
 function Register(props) {
+  const translationContext = React.useContext(TranslationContext);
+
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  const [nameError, setNameError] = React.useState('Заполните это поле.');
+  const [emailError, setEmailError] = React.useState('Заполните это поле.');
+  const [passwordError, setPasswordError] = React.useState('Заполните это поле.');
+
+  function checkButtonDisabled() {
+    return (passwordError === '' && emailError === '' && nameError === '');
+  }
+  const submitButtonDisabled = checkButtonDisabled();
+
+  function handleNameChange(e) {
+    setName(e.target.value);
+    setNameError(e.target.validationMessage);
+  }
+  function handleEmailChange(e) {
+    setEmail(e.target.value);
+    setEmailError(e.target.validationMessage);
+  }
+  function handlePasswordChange(e) {
+    setPassword(e.target.value);
+    setPasswordError(e.target.validationMessage);
+  }
+
+  const [formDisabledActive, setFormDisabledActive] = React.useState(false);
+
+  function blockingForm() {
+    setFormDisabledActive(true);
+  }
+
+  function unlockingForm() {
+    setFormDisabledActive(false);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    blockingForm();
+
+    props.handleSubmitRegister({
+      name,
+      email,
+      password,
+    })
+      .then(() => {
+        unlockingForm();
+      });
+  }
+
   return (
   <>
     <Header />
     <section className="register">
       <div className="register__column">
-        <Form formName="create-user" inputs={dataInputsRegister} />
-        <div className="register__air-block"></div>
-        <ButtonSubmit
-          buttonText="Зарегистрироваться"
-          text="Уже зарегистрированы?"
-          link__link="./signin"
-          link__text="Войти"
-        />
+        <form className="form" name="registration">
+          <label className="form__label">
+            <p className="form__text">{translations[translationContext].sign[0]}</p>
+            <input
+              className={`form__input ${formDisabledActive ? 'form__input_disabled' : ''}`}
+              name="registration"
+              id="name-input"
+              type="text"
+              value={name}
+              onChange={handleNameChange}
+              disabled={formDisabledActive}
+              minLength="2"
+              maxLength="30"
+              required
+            />
+            <span className="form__error" id="name-input-error">{nameError}</span>
+          </label>
+          <label className="form__label">
+            <p className="form__text">E-mail</p>
+            <input
+              className={`form__input ${formDisabledActive ? 'form__input_disabled' : ''}`}
+              name="registration"
+              id="email-input"
+              type="email"
+              value={email}
+              onChange={handleEmailChange}
+              disabled={formDisabledActive}
+              required
+            />
+            <span className="form__error" id="email-input-error">{emailError}</span>
+          </label>
+          <label className="form__label">
+            <p className="form__text">{translations[translationContext].sign[1]}</p>
+            <input className={`form__input ${formDisabledActive ? 'form__input_disabled' : ''}`}
+              name="registration"
+              id="password-input"
+              type="password"
+              minLength="8"
+              value={password}
+              onChange={handlePasswordChange}
+              disabled={formDisabledActive}
+              required
+            />
+            <span className="form__error" id="password-input-error">{passwordError}</span>
+          </label>
+          <div className="register__air-block"></div>
+          <ButtonSubmit
+            handleSubmit={handleSubmit}
+            buttonText={translations[translationContext].sign[2]}
+            text={translations[translationContext].sign[3]}
+            link__link="./signin"
+            link__text={translations[translationContext].sign[4]}
+            disabled={formDisabledActive || !submitButtonDisabled}
+          />
+        </form>
       </div>
     </section>
   </>

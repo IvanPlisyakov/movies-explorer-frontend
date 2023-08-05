@@ -19,6 +19,15 @@
         "react"
     ],
     "rules": {
+        "arrow-body-style": "off",
+        "no-useless-return": "off",
+        "quotes": "off",
+        "quote-props": "off",
+        "no-param-reassign": "off",
+        "no-unneeded-ternary": "off",
+        "class-methods-use-this": "off",
+        "prefer-promise-reject-errors": "off",
+        "consistent-return": "off",
         "import/prefer-default-export": "off",
         "import/extensions": "off",
         "no-unused-vars": "off",
@@ -26,7 +35,9 @@
         "react/react-in-jsx-scope": "off",
         "no-underscore-dangle": "off",
         "no-console": "off",
-        "react/prop-types": "off"
+        "react/prop-types": "off",
+        "linebreak-style": "off",
+        "import/no-cycle": "off"
     },
     "settings": {
         "react": {

@@ -26,9 +26,18 @@
   opacity: 0.85;
 }
 
+.button-submit__button_disabled {
+  background-color: #F4F4F4;
+  color: grey;
+  cursor: default;
+}
+
+.button-submit__button_disabled:hover {
+  opacity: 1;
+}
+
 .button-submit__add {
   display: inline-block;
-
 }
 
 .button-submit__add-text {

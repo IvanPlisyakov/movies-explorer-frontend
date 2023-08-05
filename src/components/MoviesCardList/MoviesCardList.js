@@ -4,17 +4,24 @@ import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
 function MoviesCardList(props) {
+  // console.log(props.cards);
   return (
     <section className="movies-card-list">
       <div className="movies-card-list__column">
         <div className="movies-card-list__cards">
-          {props.cards.map((card, i) => (
-              <MoviesCard card={card} key={i} type={props.type}/>
-          ))}
+          {props.cards
+            ? props.cards.map((card, i) => (
+              <MoviesCard
+                card={card}
+                key={i}
+                type={props.type}
+                deleteMovie={props.deleteMovie}
+                handleButtonSave={props.handleButtonSave}
+              />
+            ))
+            : <></>
+            }
         </div>
-        { props.type === 'movies'
-          && <button className="movies-card-list__more">Ещё</button>
-        }
       </div>
     </section>
   );
